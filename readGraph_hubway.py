@@ -6,25 +6,34 @@ class Loader:
 	def load_DiGraph(self, starttime, endtime, fileList):
 		G = nx.DiGraph();
 		count = 0;
-		for file in fileList:
-			csvfile = open(file, 'rb')
-			reader = csv.DictReader(csvfile)
-			for row in reader:
-				stime = row['start_date']
-				stime = self.timeParse(stime)
-				if(starttime<=stime and endtime>=stime):
-					count+=1
-					#if(count % 1000 == 0):
-						#print count
-					if (G.has_edge(row['strt_statn'], row['end_statn'])):
-						w = G[row['strt_statn']][row['end_statn']]['w']
-						w += 1
-					else:
-						w = 1
-					G.add_edge(row['strt_statn'], row['end_statn'], w = w)
-				elif (stime>endtime):
-					break
-		return G
+		file = fileList[0]
+		csvfile = open(file, 'rb')
+		reader = csv.DictReader(csvfile)
+		for row in reader:
+			stime = row['start_date']
+			stime = self.timeParse(stime)
+			if(starttime<=stime and endtime>=stime):
+				count+=1
+				#if(count % 1000 == 0):
+					#print count
+				if (G.has_edge(row['strt_statn'], row['end_statn'])):
+					w = G[row['strt_statn']][row['end_statn']]['w']
+					w += 1
+				else:
+					w = 1
+				G.add_edge(row['strt_statn'], row['end_statn'], w = w)
+			elif (stime>endtime):
+				break
+
+		pos = {}
+		file = fileList[1]
+		csvfile = open(file, 'rb')
+		reader = csv.DictReader(csvfile)
+		for row in reader:
+			pid = row['id']
+			pos[pid] = (float(row['lat']), float(row['lng']))
+
+		return G, pos
 
 	def load_MultiDiGraph(self, starttime, endtime, fileList):
 		G = nx.MultiDiGraph();
