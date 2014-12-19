@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 
 /**
@@ -12,7 +13,7 @@ public class Graph {
 
 
     public int INIT_WEIGHT = 100;
-    public double DECAY_FACTOR = 2;
+    public double DECAY_FACTOR = 1.2;
     public double P = 0.8;
     public int MIN_CONN = 5;
 
@@ -87,15 +88,18 @@ public class Graph {
         GraphInit();
     }
 
-    public void generate(){
+    public void generate() throws Exception{
         clear();
         int a = newNode();
         int b = newNode();
         newEdge(a,b,INIT_WEIGHT);
 
         int maxNode = 500;
-        int iter = 0;
+        int iter = 1;
         while(iter<maxNode) {
+            if(iter%50==0){
+                printGraph("Graph_"+iter+".txt");
+            }
             printInfo();
             newNodeCon();
             iter++;
@@ -182,4 +186,57 @@ public class Graph {
     public void printInfo(){
         System.out.println(numOfNodes+" "+numOfEdgesW);
     }
+
+    public void printGraph(String file) throws Exception{
+        File f = new File(file);
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
+        for(int i=0; i<=lastNode; ++i){
+            for(int j=i+1; j<=lastNode; ++j){
+                if(mat[i][j]>0){
+                    writer.write(i+" "+j+"\n");
+                }
+            }
+        }
+        writer.flush();
+        writer.close();
+    }
+
+    public void printDegree() throws Exception{
+        File f = new File("degree.txt");
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
+        Map<Integer, Integer> dmap = new HashMap<Integer, Integer>();
+        for(int i=0; i<=lastNode;++i) {
+            int sum = 0;
+            for(int j=0; j<=lastNode;++j) {
+                sum+=mat[i][j];
+            }
+            int d = sum;
+            if (!dmap.containsKey(d)) {
+                dmap.put(d, 0);
+            }
+            dmap.put(d, dmap.get(d) + 1);
+        }
+        for(int d: dmap.keySet()){
+            writer.write(d+" "+dmap.get(d)+"\n");
+        }
+        writer.flush();
+        writer.close();
+    }
+
+    public void printDegreePoints() throws Exception {
+        File f = new File("degree_points.txt");
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
+        Map<Integer, Integer> dmap = new HashMap<Integer, Integer>();
+        for (int i = 0; i <= lastNode; ++i) {
+            int sum = 0;
+            for (int j = 0; j <= lastNode; ++j) {
+                sum += mat[i][j];
+            }
+            writer.write(sum + "\n");
+        }
+        writer.flush();
+        writer.close();
+    }
+
+
 }

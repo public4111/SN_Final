@@ -42,7 +42,7 @@ while starttime<lasttime:
 		#if(hist[path] != 0):
 			#print path, hist[path]
 
-	theta = 0.95
+	theta = 0.90
 	dia = 0
 	for path in range(9):
 		hist[path+1] = hist[path+1]+hist[path]
