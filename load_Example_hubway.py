@@ -10,4 +10,11 @@ endtime = datetime.datetime(2013,8,28,0,0,0);
 G = l.load_MultiDiGraph(starttime, endtime, fileList)
 #you also can load as di-graph with weight.
 #G = l.load_DiGraph(starttime, endtime, fileList)
-print(G.number_of_nodes())
+iter = 0
+for e in G.edges():
+	iter = iter+1
+	if(iter%100==0):
+		wait = raw_input("continue?")
+	print G.number_of_edges(e[0],e[1]), G.number_of_edges(e[1],e[0])
+
+#print(G.number_of_nodes())

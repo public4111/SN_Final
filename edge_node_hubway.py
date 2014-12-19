@@ -6,7 +6,7 @@ import datetime
 from readGraph_hubway import Loader
 l = Loader()
 fileList = ['hubway_trips.csv'];
-gap = datetime.timedelta(days=100)
+gap = datetime.timedelta(days=100)#100 is a good parameter here
 duration = datetime.timedelta(days=30)
 starttime = datetime.datetime(2011,7,28,0,0,0)
 lasttime = datetime.datetime(2013,10,31,23,59,59)
@@ -17,6 +17,7 @@ while starttime<lasttime:
 	G = l.load_MultiDiGraph(starttime, endtime, fileList)
 #you also can load as di-graph with weight.
 #G = l.load_DiGraph(starttime, endtime, fileList)
-	print G.number_of_nodes() ,  G.number_of_edges() 
+	if G.number_of_nodes()!=0:
+		print G.number_of_nodes() ,  G.number_of_edges() 
 	starttime = endtime + gap
 	endtime = starttime + duration
